@@ -1,0 +1,91 @@
+.row.summary
+	.detail {{sig.signature.detail}} 
+		span(ng-if='user.authenticated && (user.permissions.admin || isMine(sig))')
+			i.pe-7s-note.pe-lg.pe-va.editSigDetail(ng-init='loadPlatforms()', ng-controller='modalCtrl', ng-click='setSig(sig.signature)', data-animation="am-fade-and-scale", data-placement="center", data-template='../partials/sig-edit-modal', bs-modal="modal")
+//- .col-md-2
+	//- h1.fa.fa-info
+
+
+.editPanel
+	ul#relNav.nav.nav-tabs(ng-controller='addSigCtrl')
+		//- tags-input(ng-model="tags")
+		//- 	auto-complete(source="loadTags($query)")
+		li(ng-repeat='rel in data.releases track by $index', ng-class='{active: $index == active}', ng-if='hasContent(data)')
+			a(data-toggle='tab', data-index='$index', ng-click='setActive(rel.rel, $index)') {{rel.rel}}
+		li(ng-if='user.authenticated && (user.permissions.admin || isMine(data.sid))')
+			button.btn.pe-7s-plus.pe-2x.pe-va.clickable(ng-if='!showCatPanel && user.authenticated', ng-click='showAddCatPanel()')
+		
+		li(ng-if='user.authenticated && (user.permissions.admin || isMine(data.sid))')
+			button.btn.pe-7s-close-circle.pe-2x.pe-va.clickable(ng-if='!deleteCatPanel && user.authenticated', ng-click='showDeleteCatPanel()')
+		
+		li(ng-if='user.authenticated && (user.permissions.admin || isMine(data.sid))')
+			button.btn.pe-7s-close.pe-2x.pe-va.clickable(ng-if='showCatPanel && user.authenticated', ng-click='hideAddCatPanel()')
+		li.slide(ng-if='showCatPanel && user.authenticated && (user.permissions.admin || isMine(data.sid))')
+			.addRelPanel
+				input(name='release', placeholder='New Release', ng-model='newRelease') 
+				.pull-right 
+					button.btn.btn-primary(ng-click='updateSigTest(newRelease); hideAddCatPanel()') OK
+		
+		li(ng-if='user.authenticated && (user.permissions.admin || isMine(data.sid))')
+			button.btn.pe-7s-close.pe-2x.pe-va.clickable(ng-if='deleteCatPanel && user.authenticated', ng-click='hideDeleteCatPanel()')
+		li.slide(ng-if='deleteCatPanel && user.authenticated && (user.permissions.admin || isMine(data.sid))')
+			.deleteRelPanel
+				input(name='release', placeholder='Delete Release', ng-model='deleteRelease') 
+				.pull-right 
+					button.btn.btn-primary(ng-click='_updateSigTest(deleteRelease); hideDeleteCatPanel()') OK
+	#relNav.tab-content(ng-if='hasContent(data)', ng-controller='addSigCtrl')
+		//- 
+		//- RELEASES
+		//- 
+		div(ng-repeat='(relKey, rel) in data.releases track by $index', class='tab-pane', ng-class='{active: $index == active}', ng-if='data.releases', ng-init='hideNewTestCompPanel(relKey)') 
+			div.testPanel
+				//- 
+				//- EXISTING TESTS
+				//- 
+				div.testContainer(ng-if='rel.tests.length', ng-repeat='test in rel.tests track by $index', ng-init='setValues(rel, test, relKey, test.tid)')
+					//- .falloff
+					.options.col-md-12
+						.label.label-info.title(ng-class='colorScheme(data.sid)') TEST-{{test.tid}}
+						.label.label-info.title {{test.platform}}
+						button.btn.pe-7s-edit.pe-lg.pe-va.enableEdit(ng-click='enableEdit(relKey, test.tid)', ng-if='user.authenticated && !editing[relKey][test.tid] && (user.permissions.admin || isMine(data.sid))')
+						button.btn.btn-danger.removeTest(ng-click='removeTest(relKey, test.tid)', ng-if='user.authenticated && (user.permissions.admin || isMine(data.sid)) && editing[relKey][test.tid]') Delete
+						//- button.btn.pe-7s-paper-plane.pe-lg.pe-va(ng-click='makeGlobal(relKey, test.tid)', ng-if='user.authenticated && test.private && (user.permissions.admin || isMine(data.sid))') 
+						button.btn.btn-primary.saveTest(ng-if='user.authenticated && (savable[relKey][test.tid] || editing[relKey][test.tid])', ng-click='saveTest(rel.rel, test.tid); cancelEdit(relKey, test.tid)', ng-disabled='alerts[relKey][test.tid].disableSave') Save
+						button.btn.btn-warning.cancelEdit(ng-click='cancelEdit(relKey, test.tid)', ng-if='user.authenticated && editing[relKey][test.tid] && (user.permissions.admin || isMine(data.sid))') Cancel
+					.container
+						.col-md-8.controlPanel(ng-class='colorScheme(data.sid)')
+							//- REGEX
+							.text-block(ng-if='!editing[relKey][test.tid]')
+								.vertical-regex.col-md-11 REGEX
+								.textarea.col-md-12 {{tests[relKey][test.tid].regex}}
+							.text-block(ng-if='editing[relKey][test.tid]')
+								.vertical-regex REGEX
+								textarea(name='regex', placeholder='Regex', ng-model='tests[relKey][test.tid].regex', , ng-change='tryRegex(tests[relKey][test.tid].regex, tests[relKey][test.tid].context, relKey, test.tid)') 
+							//- TYPE
+							.text-block(ng-if='editing[relKey][test.tid]')
+								.vertical-context TYPE
+								select.form-control(ng-if='user.permissions.tec', ng-model='tests[relKey][test.tid].commandType', ng-disabled='!editing[relKey][test.tid]', ng-change='setCommandType(tests[relKey][test.tid].commandType, relKey, test.tid)', ng-options='i.id as i.name for i in commandTypes')
+									option(value='') --
+							//- COMMAND
+							.text-block(ng-if='editing[relKey][test.tid]')
+								.vertical-context COMMAND
+								textarea(name='command', placeholder='Command', ng-model='tests[relKey][test.tid].command', ng-disabled='!editing[relKey][test.tid]', ng-change='setCommand(tests[relKey][test.tid].command, relKey, test.tid)')
+							//- CONTEXT
+							.text-block(ng-if='!editing[relKey][test.tid]')
+								.vertical-context CONTEXT
+								pre.textarea.context {{tests[relKey][test.tid].context}}
+							.text-block(ng-if='editing[relKey][test.tid]')
+								.vertical-context CONTEXT
+								textarea.context(name='context', placeholder='Context', ng-model='tests[relKey][test.tid].context', ng-disabled='!editing[relKey][test.tid]', ng-change='tryRegex(tests[relKey][test.tid].regex, tests[relKey][test.tid].context, relKey, test.tid)')
+						.col-md-4.matchPanel(ng-if='tests[relKey][test.tid].matches')
+							.label.label-success.vertical.success MATCH
+							table.table.table-striped
+								tr(ng-repeat='(key, value) in tests[relKey][test.tid].matches track by $index')
+									td {{key}}
+									td {{value}}
+					
+				div.row
+					button.btn.btn-info.pull-right.addTest(ng-if='user.authenticated && !showNewTestPanel[relKey] && (user.permissions.admin || isMine(data.sid))', ng-click='saveTest(rel.rel, "tmp")') Add Test
+					button.btn.pe-7s-close.pe-2x.pe-va(ng-if='showNewTestPanel[relKey]', ng-click='hideNewTestCompPanel(relKey)')		
+				
+		

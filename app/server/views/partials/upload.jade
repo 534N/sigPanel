@@ -1,0 +1,86 @@
+.container(ng-controller='uploadCtrl', ng-init='setUser()', ng-if="user.authenticated")
+	div.row(ng-file-drop, ng-if='!allCompleted')
+		.col-md-4#pool
+			accordion(close-others="oneAtATime")
+				accordion-group(ng-repeat='(platform, pObj) in pool')
+					accordion-heading 
+						i.glyphicon(ng-click='toggleMe(platform)', ng-class="folderStatus(platform)") &nbsp; {{platform}}
+					accordion-group(ng-repeat='(release, rObj) in pObj track by $index')
+						accordion-heading 
+							i.glyphicon.release(ng-click='toggleMe(release)', ng-class="folderStatus(release)") &nbsp; {{release}}
+						ul 
+
+							li(ng-repeat='file in rObj track by $index') 
+								i.glyphicon.glyphicon-file &nbsp; {{file}} &nbsp;&nbsp;
+								//-download tag below does not support IE.
+								a(href='{{blah.path}}{{platform}}/{{release}}/{{file}}' download='{{file}}')
+									i.glyphicon.glyphicon-download-alt &nbsp;&nbsp;							
+								i.glyphicon.glyphicon-search(ng-click='getFileContent(platform, release, file)', data-animation="am-fade-and-scale", data-placement="center", data-template='../partials/file-content-modal', bs-modal="modal") &nbsp;
+
+
+		.col-md-8(ng-file-over)
+			div.panel-title-panel
+				span.panel-title Upload 
+				br
+				div.panel-sub-title Drag and drop the TS files to the panel to start
+
+			.upload-panel-empty(ng-if="!uploader.queue.length")
+				i.pe-7s-cloud-upload.pe-lg.pe-va
+
+			.upload-panel(ng-if="uploader.queue.length")
+				table.table
+					thead
+						tr
+							th Name
+							th(ng-if='uploader.isHTML5') Size
+							th(ng-if='uploader.isHTML5') Progress
+							th Status
+							th Actions
+					tbody
+						tr(ng-repeat='item in uploader.queue')
+							td.file-name {{item.file.name}} 
+							td(ng-if='uploader.isHTML5', nowrap) {{item.file.size/1024/1024|number:2}} MB
+							td(ng-if='uploader.isHTML5')
+								div.progress
+									div.progress-bar(role='progressbar', ng-style='{ "width": item.progress + "%"}')
+							td
+								span.success(ng-if='item.isSuccess')
+									i.pe-7s-check.pe-lg.pe-va
+								span.attention(ng-if='item.isError')
+									i.pe-7s-attention.pe-lg.pe-va
+							td.controls
+								//- i.pe-7s-cloud-upload.pe-lg.pe-va(ng-click='item.upload()', ng-if='(!item.isReady) && (!item.isUploading) && (!item.isSuccess)') &nbsp;  &nbsp;
+								//- i.pe-7s-ticket.pe-lg.pe-va(ng-if='(!item.isReady) && (!item.isUploading) && (!item.isSuccess)', data-animation="am-fade-and-scale", data-placement="center", data-template='../partials/fileInfo-modal', bs-modal="modal") &nbsp;  &nbsp;
+								i.pe-7s-cloud-upload.pe-lg.pe-va(data-animation="am-fade-and-scale", data-placement="center", data-template='../partials/fileInfo-modal', bs-modal="modal", ng-if='(!item.isReady) && (!item.isUploading) && (!item.isSuccess) && (item.repeat=="true")') &nbsp;  &nbsp;
+								i.pe-7s-info.pe-lg.pe-va(ng-if='item.repeat=="false"' data-title='{{tooltip.warn}}', data-animation="am-fade-and-scale", bs-tooltip="tooltip") &nbsp;  &nbsp;
+								i.pe-7s-trash.pe-lg.pe-va(ng-click='item.remove()')
+
+	div.row(ng-if='allCompleted')
+		.col-md-12
+			div(ng-repeat='(mac, matches) in signatureMatches track by $index')
+				h1 {{mac}}
+				table.table	
+					tr 
+						th 
+						th COMPONENT
+						th(ng-repeat='timestamp in signatureTimestamps') {{timestamp}}
+						th DIFF			
+					tr(ng-repeat='(sid, sidMatch) in matches track by $index', ng-model='sid')
+						td {{sid}}
+						td 
+						td(ng-repeat='timestamp in signatureTimestamps')
+						td THRESHOLD
+						tr(ng-repeat='(comp, data) in sidMatch track by $index')
+							td
+							td {{comp}}
+						//- {{signatureMatches[mac][sid]}}
+					//- tr(ng-repeat='(comp, data) in signatureMatches[mac][sid] track by $index') 
+					//- 	td
+					//- 	td {{comp}}
+					//- 	td(ng-repeat='detail in data') {{detail[0]['errorCounter']}}
+						//- tr(ng-repeat='(comp, ')
+						//- 	td {{sid}}
+						//- 	td {{data}}
+
+
+					//- table(ng-repeat=)

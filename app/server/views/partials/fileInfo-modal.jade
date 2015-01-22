@@ -1,0 +1,27 @@
+.modal
+	.modal-dialog
+		.modal-content
+			.modal-header
+				div.modal-title 
+					div Upload File Info
+
+			.modal-body
+				table.table
+					tr 
+						td.pull-right Release
+						td
+							select(ng-model='fileobj.release', ng-options='release.name for release in releases')
+								option(value="") --		
+					tr(ng-if='showPlatform') 
+						td.pull-right Platform
+						td
+							select(ng-model='fileobj.platform', ng-options='platform.name for platform in platforms')
+								option(value="") --														
+					tr(ng-if='showSigs') 
+						td.pull-right Signatures
+						td
+							select(ng-model='fileobj.signatures', ng-options='sig.name for sig in sigs', multiple, ng-multiple="true")
+								option(value="") --	
+			.modal-footer()
+				button.btn.btn-warning(ng-click='$hide()') Cancel
+				button.btn.btn-primary(ng-click='item.upload()', ng-disabled='!uploadReady') Confirm Upload

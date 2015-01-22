@@ -1,0 +1,8 @@
+.row#regression
+	.container
+		table.table.table-striped
+			tr(ng-repeat="sObj in allSigs | orderBy : sObj.sid : reverse")
+				td {{sObj.sid}}
+				td {{sObj.name}}
+				td(ng-repeat='(key, relObj) in allSigTests[sObj.sid].releases') 
+					.release(ng-click='runRegression(sObj.sid, key)') {{key}}

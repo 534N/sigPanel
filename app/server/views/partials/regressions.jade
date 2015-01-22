@@ -1,0 +1,31 @@
+.row#regression
+	.container
+		.row
+			//- table.table.table-striped
+			.col-md-5
+				accordion(close-others="oneAtATime")
+					accordion-group.list(ng-repeat="(date, sigs) in regressions")
+						accordion-heading.date 
+							i.glyphicon.glyphicon-calendar(ng-class='folderStatus(date)', ng-click='toggleMe(date)') &nbsp; {{date}} &nbsp;
+							i.glyphicon(ng-class='status(date)')
+						accordion-group(ng-repeat="(sid, platforms) in sigs", ng-init='formatDate(log.date)')
+							accordion-heading 
+								i.glyphicon(ng-class='folderStatus(date, sid)', ng-click='toggleMe(date, sid)').sig-name &nbsp; {{sid}} {{sigInfo[sid]}} &nbsp;
+								i.glyphicon(ng-class='status(date, sid)')
+							accordion-group(ng-repeat="(platform, releases) in platforms")
+								accordion-heading
+									i.glyphicon(ng-class='folderStatus(date, sid, platform)', ng-click='toggleMe(date, sid, platform)').platform &nbsp; {{platform}} &nbsp;
+									i.glyphicon(ng-class='status(date, sid, platform)')
+								accordion-group(ng-repeat="(rel, fpObj) in releases")
+									accordion-heading
+										i.glyphicon(ng-class='folderStatus(date, sid, platform, rel)', ng-click='toggleMe(date, sid, platform, rel)').release &nbsp; {{rel}} &nbsp;
+										i.glyphicon(ng-class='status(date, sid, platform, rel)')
+									ul(ng-if='fpObj.pass')
+										li(ng-repeat='(file, fDetail) in fpObj.pass')
+											i.glyphicon.glyphicon-file.filename &nbsp; {{file}} &nbsp;&nbsp;
+												i.glyphicon.glyphicon-ok.detail(ng-click='setData(platform, rel, file, fDetail, "pass")', data-template="../partials/test-result-detail", data-placement="right", data-animation="am-slide-right", bs-aside="aside", data-container="body")
+									ul(ng-if='fpObj.fail')
+										li(ng-repeat='(file, fDetail) in fpObj.fail')
+											i.glyphicon.glyphicon-file.filename &nbsp; {{file}} &nbsp;&nbsp;
+												i.glyphicon.glyphicon-remove.detail(ng-click='setData(platform, rel, file, fDetail, "fail")', data-template="../partials/test-result-detail", data-placement="right", data-animation="am-slide-right", bs-aside="aside", data-container="body")
+

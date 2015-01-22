@@ -1,0 +1,17 @@
+.row	
+	.table-container(ng-controller='loadSig' ng-init='listAllSigs()')
+		table.user-table.table.table-striped(ng-table="tableParams" show-filter="true")
+			tr.booking-table.table.table-striped(ng-repeat='sig in $data')
+				td(data-title="'category'" filter="{ 'category': 'text' }" sortable="'category'") {{sig.category}}
+				td(data-title="'sid'" filter="{ 'sid': 'text' }" sortable="'sid'") {{sig.sid}}
+				td(data-title="'name'"  filter="{ 'name': 'text' }" sortable="'name'") {{sig.name}}
+				td(data-title="'component'"  filter="{ 'component': 'text' }" sortable="'component'") {{sig.component}}
+				td(data-title="'action'" filter="{ 'action': 'text' }" sortable="'action'") {{sig.action}}
+				td(data-title="'dts'" filter="{ 'dts': 'text' }" sortable="'dts'") {{sig.dts}}													
+				td(data-title="'fixed'" filter="{ 'fixed': 'text' }" sortable="'fixed'") {{sig.fixed}}	
+				td(data-title="'detail'" filter="{ 'detail': 'text' }" sortable="'detail'") {{sig.detail}}																									
+				td(data-title="'level'" filter="{ 'level': 'text' }" sortable="'level'") {{sig.level}}													
+				td(data-title="'threshold'" filter="{ 'threshold': 'text' }" sortable="'threshold'") {{sig.threshold}}
+				td
+					i.pe-7s-note.pe-lg.pe-va.editSigDetail(data-animation="am-fade-and-scale", data-placement="center", data-template='../partials/sig-edit-modal', bs-modal="modal")
+					

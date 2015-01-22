@@ -1,0 +1,79 @@
+div.page-header.container(id='addingSig', ng-if='user.authenticated')
+	h1 Add Signature 
+	hr 
+	table.table.row#addSigPanel(ng-controller='addSigCtrl') 
+		tr 
+			td.text.pull-right PLATFORM
+			td.col-md-6
+				span(ng-repeat='p in platforms')
+					{{p}} 
+					input.signature-name(type='checkbox', ng-model='newObj.newSigPlatform[p]', ng-change='loadCats()')
+
+		tr 
+			td.text.pull-right CATEGORY
+			td.col-md-6
+				select.form-control(ng-model='newObj.newSigCategory', ng-options='i.id as i.name for i in cateList')
+					option(value='') --
+				//- input.signature-name(name='category', size='350px', ng-model='newSigCategory', ng-change='verifySigAdd()', placeholder='Category') 
+		tr(ng-if='showComp') 
+			td.text.pull-right COMPONENT 
+			td.col-md-6 
+				select.form-control(ng-model='newObj.currentComponent', ng-options='i.id as i.name for i in compList')
+					option(value='') --
+			td.col-md-1.center.text
+				a.pe-7s-plus.pe-2x.pe-va(ng-if='!showCompPanel', ng-click='showAddCompPanel()')
+				a.pe-7s-close.pe-2x.pe-va(ng-if='showCompPanel', ng-click='hideAddCompPanel()')
+			td.col-md-3
+				div.slide(ng-if='showCompPanel')
+					input(name='component', size='150', ng-model='newObj.newSigComponent', placeholder='New Component') 
+					button.btn.btn-primary(ng-click='addNewComponent()') OK
+		tr(ng-if='showRest') 
+			td.text.pull-right SIGNATURE
+			td.col-md-6
+				input.signature-name(name='signature', size='350px', ng-model='newObj.newSigName', ng-change='verifySigAdd()', placeholder='New Signature') 
+		tr(ng-if='showRest && !user.permissions.tec') 
+			td.text.pull-right DETAIL
+			td.col-md-6
+				textarea(name='detail', size='350', ng-model='newObj.newSigDetail', ng-change='verifySigAdd()', placeholder='Details')		
+		tr(ng-if='showRest && user.permissions.tec') 
+			td.text.pull-right 3LS MESSAGE
+			td.col-md-6
+				textarea(name='detail', size='350', ng-model='newObj.newSigDetail', ng-change='verifySigAdd()', placeholder='3LS message')
+		tr(ng-if='showRest && user.permissions.tec') 
+			td.text.pull-right 2LS MESSAGE
+			td.col-md-6
+				textarea(name='tlsmessage', size='350', ng-model='newSigtlsmessage', ng-change='verifySigAdd()', placeholder='2LS message')
+		tr(ng-if='showRest && user.permissions.tec') 
+			td.text.pull-right CUSTOMER MESSAGE
+			td.col-md-6
+				textarea(name='customermessage', size='350', ng-model='newSigcustomermessage', ng-change='verifySigAdd()', placeholder='customer message')
+		tr(ng-if='showRest') 
+			td.text.pull-right ACTION
+			td.col-md-6
+				textarea(name='detail', size='350', ng-model='newSigAction', ng-change='verifySigAdd()', placeholder='Action') 
+		tr(ng-if='user.permissions.tec && showRest')
+			td.text.pull-right LEVEL
+			td.col-md-6
+				input.signature-level(name='level', size='150', ng-model='newSigLevel', ng-change='verifySigAdd()', placeholder='Level') 
+				&nbsp;
+				input.signature-threshold(name='threshold', size='150', ng-model='newSigThreshold', ng-change='verifySigAdd()', placeholder='Threshold') 
+		tr(ng-if='user.permissions.tec && showRest')
+			td.text.pull-right DTS
+			td.col-md-6
+				input.signature-dts(name='dts', size='350', ng-model='newSigDTS', ng-change='verifySigAdd()', placeholder='DTS') 
+		tr(ng-if='user.permissions.tec && showRest')
+			td.text.pull-right FIX
+			td.col-md-6
+				input.signature-fix(name='fix', size='100', ng-model='newSigFix', ng-change='verifySigAdd()', placeholder='Fix') 
+		tr(ng-if='user.permissions.tec && showRest')
+			td.text.pull-right RN
+			td.col-md-6
+				input.signature-rn(name='RN', size='100', ng-model='newSigRN', ng-change='verifySigAdd()', placeholder='RN') 
+		tr(ng-if='user.permissions.tec && showRest')
+			td.text.pull-right TA
+			td.col-md-6
+				input.signature-ta(name='TA', size='100', ng-model='newSigTA', ng-change='verifySigAdd()', placeholder='TA')
+		tr(ng-if='showRest') 
+			td
+			td.col-md-6
+				button.btn.btn-primary.pull-right(ng-disabled='enableSigAdd', ng-click='addSignature(currentComponent)') Add

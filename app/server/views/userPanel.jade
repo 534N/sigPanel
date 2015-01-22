@@ -1,0 +1,66 @@
+include includes/mixins
+
+extends layout
+
+block content
+	.navbar.top-nav
+		.container
+			.navbar-brand User Control Panel
+			.navbar-right(ng-if='!user.authenticated')
+				button.btn.btn-user
+					a(href='#/login') 
+						i.pe-7s-user.pe-2x.pe-va
+			.navbar-right(ng-if='user.authenticated')
+				span.username 
+					i.pe-7s-user.pe-2x.pe-va 
+					&nbsp;
+					{{user.first_name }} {{user.last_name }}
+				button#btn-logout.btn.btn-primary.eject-button(ua-logout)
+					i.pe-7s-power.pe-lg.pe-va
+
+	.navbar.sub-nav(ng-controller='navCtrl')
+		.container
+			ul.nav.nav-tabs.sub-nav-tabs
+				li(ng-class="{active:isActive('/loadUsers/all')}", ng-if="user.authenticated && user.properties.company.value == 'ALU' && user.permissions.admin.value == true")
+					a(href="#loadUsers/all") All USERS
+				li(ng-class="{active:isActive('/loadUsers/tec')}", ng-if="user.authenticated && user.properties.company.value == 'ALU' && user.permissions.admin.value == true")
+					a(href="#loadUsers/tec") TEC
+				li(ng-class="{active:isActive('/loadUsers/tac')}", ng-if="user.authenticated && (user.permissions.hasOwnProperty('tac') == true || user.properties.company.value == 'ALU') && user.permissions.admin.value == true")
+					a(href="#loadUsers/tac") TAC
+				li(ng-class="{active:isActive('/loadUsers/ca')}", ng-if="user.authenticated && (user.permissions.hasOwnProperty('ca') == true || user.properties.company.value == 'ALU') && user.permissions.admin.value == true")
+					a(href="#loadUsers/ca") CA
+				li.pull-right(ng-class="{active:isActive('/admin/access_management')}", ng-if="user.authenticated && user.permissions.admin.value == true")
+					a(href="#admin/access_management") ACCESS MANAGEMENT						
+
+	div.ng-view-class.row
+		div(ng-view)
+		
+
+block scripts
+	script(src='/socket.io/socket.io.js')
+	script(src='/vendor/underscore/underscore.js')
+	script(src='/vendor/angular/angular/angular.min.js')
+	script(src='/vendor/angular/angular-animate/angular-animate.min.js')	
+	script(src='/vendor/angular/angular-resource/angular-resource.min.js')
+	script(src='/vendor/angular/angular-route/angular-route.min.js')
+	script(src='/vendor/angular/angular-socket-io/socket.min.js')
+	script(src='/vendor/angular/ngQuickDate/dist/ng-quick-date.min.js')
+	script(src='/javascripts/app.js')
+	script(src='/javascripts/controllers.js')
+	script(src='/javascripts/services.js')
+	script(src='/javascripts/d3.js')
+	script(src='/javascripts/directives.js')
+	script(src='/javascripts/filters.js')
+	script(src='/vendor/angular/userapp/userapp.client.js')
+	script(src='/vendor/angular/userapp-angular/angularjs.userapp.js')
+	script(src='/vendor/angular/ngprogress/build/ngProgress.min.js')
+	script(src='/vendor/angular/angular-flash/dist/angular-flash.min.js')
+	script(src='/vendor/angular/angular-strap/dist/angular-strap.min.js')
+	script(src='/vendor/angular/angular-strap/dist/angular-strap.tpl.min.js')
+	script(src='/vendor/angular/spin.js/spin.js')
+	script(src='/vendor/angular/angular-spinner/angular-spinner.min.js')
+	script(src='/vendor/angular/angular-file-upload/angular-file-upload.min.js')
+	script(src='/vendor/angular/angular-elastic/elastic.js')
+	script(src='/vendor/angular/angular-timer/timer.js')
+	script(src='/vendor/angular/ng-table/ng-table.min.js')	
+

@@ -1,0 +1,91 @@
+include includes/mixins
+
+extends layout
+
+block content
+	.navbar.top-nav
+		.container
+			.navbar-brand Signatures
+			.navbar-right(ng-controller='browserCtrl', ng-if='!user.authenticated')
+				a(ng-if='showlink', href='http://{{host}}:3000/sig#/ldap') LOG IN
+					&nbsp;
+				button.btn.btn-primary
+					a(href='#/ldap') Login
+			.navbar-right(ng-if='user.authenticated')
+				spans {{user.csl}}
+				button#btn-logout.btn.btn-primary.eject-button(ng-click='logout()')
+					i.icon-lock.icon-white.ss-eject
+	.navbar-center.platform(ng-controller='loadSig', ng-init='loadPlatforms()')
+		ul.nav.nav-tabs
+			li(ng-repeat='platform in platforms', ng-class="{active:isActive('/loadSigs/{{platform}}/SYS')}")
+				a(href='#loadSigs/{{platform}}/SYS') {{platform}}
+	.navbar.sub-nav.signatures(ng-controller='loadSig', ng-init='getCategories()')
+		.container
+			ul.nav.nav-tabs.sub-nav-tabs
+				li(ng-repeat='cat in categories track by $index', ng-class="{active:isActive('/loadSigs/{{platform}}/{{cat.category}}')}")
+					a(href='#loadSigs/{{platform}}/{{cat.category}}') {{cat.category}}
+
+				li(ng-if='user.authenticated', ng-class="{active:isActive('/loadAllSigs')}")
+					a(href='#loadAllSigs') ALL SIGNATURES
+
+				li(ng-if='user.authenticated', ng-class="{active:isActive('/addSig')}")
+					a(href='#addSig') ADD SIG
+				li(ng-if='user.authenticated', ng-class="{active:isActive('/sigTests')}")
+					a(href='#sigTests') ALL TESTS
+				li(ng-if='user.authenticated', ng-class="{active:isActive('/regressions')}")
+					a(href='#regressions') REGRESSIONS
+
+				li(ng-if='user.authenticated', ng-class="{active:isActive('/upload')}")
+					a(href='#upload') UPLOAD				
+
+				//- li(ng-if='user.authenticated')
+				//- 	button.btn.pe-7s-plus.pe-2x.pe-va.clickable(ng-if='!showCatPanel && user.authorized', ng-click='showAddCatPanel()')
+				//- li(ng-if='user.permissions.tec')
+				//- 	button.btn.pe-7s-close.pe-2x.pe-va.clickable(ng-if='showCatPanel && user.authorized', ng-click='hideAddCatPanel()')
+				//- li.slide(ng-if='showCatPanel && user.permissions.tec')
+				//- 	.addCatPanel
+				//- 		input(name='category', placeholder='New Category', ng-model='newObj.newSigCategory') 
+				//- 		.pull-right 
+				//- 			button.btn.btn-primary(ng-click='addNewCategory()') OK
+					
+	div.ng-view-class
+		div#sigPanel(ng-view)
+		
+
+block scripts
+	script(src='/socket.io/socket.io.js')
+	script(src='/vendor/underscore/underscore.js')
+	script(src='/vendor/angular/angular/angular.min.js')
+	script(src='/vendor/angular/angular-animate/angular-animate.min.js')	
+	script(src='/vendor/angular/angular-resource/angular-resource.min.js')
+	script(src='/vendor/angular/angular-route/angular-route.min.js')
+	script(src='/vendor/angular/angular-cookies/angular-cookies.min.js')
+	script(src='/vendor/angular/angular-socket-io/socket.min.js')
+	script(src='/vendor/angular/ng-tags-input/ng-tags-input.min.js')	
+	//- ANGULAR
+	script(src='/javascripts/apps/_module.js')
+	script(src='/javascripts/apps/sigPanel.js')
+	script(src='/javascripts/controllers/_module.js')
+	script(src='/javascripts/controllers/general.js')
+	script(src='/javascripts/controllers/sigPanel.js')
+	script(src='/javascripts/services/_module.js')
+	script(src='/javascripts/services/general.js')
+	script(src='/javascripts/services/sigPanel.js')
+	script(src='/javascripts/directives/_module.js')
+	script(src='/javascripts/directives/sigPanel.js')
+	script(src='/javascripts/filters/_module.js')
+	script(src='/javascripts/filters/general.js')
+	script(src='/javascripts/filters/sigPanel.js')
+	script(src='/vendor/angular/angular-file-upload/angular-file-upload.min.js')
+	//- 
+	script(src='/vendor/angular/ngprogress/build/ngProgress.min.js')
+	script(src='/vendor/angular/angular-flash/dist/angular-flash.min.js')
+	script(src='/vendor/angular/angular-strap/dist/angular-strap.min.js')
+	script(src='/vendor/angular/angular-strap/dist/angular-strap.tpl.min.js')
+	script(src='/vendor/angular/spin.js/spin.js')
+	script(src='/vendor/angular/angular-spinner/angular-spinner.min.js')
+	script(src='/vendor/angular/ng-table/ng-table.min.js')	
+	script(src='/vendor/angular/ui-bootstrap/ui-bootstrap-custom-0.12.0.min.js')
+	script(src='/vendor/angular/ui-bootstrap/ui-bootstrap-custom-tpls-0.12.0.min.js')
+
+

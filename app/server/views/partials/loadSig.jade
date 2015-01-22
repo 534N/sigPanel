@@ -1,0 +1,5 @@
+.row
+	.container
+		.col-md-12
+			div#sigNav(bs-tabs)
+				sig-edit-panel(ng-repeat='sObj in sigList track by $index', title='{{sObj.signature.name}}', data='sigTestList[sObj.signature.sid]', sig='sObj', mine='mySigs', row='$index + 1', callback-fn='', user='user', bs-pane) 

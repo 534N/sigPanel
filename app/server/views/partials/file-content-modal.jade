@@ -1,0 +1,22 @@
+.modal
+	.modal-dialog.fileinfo
+		.modal-content
+			.modal-header
+
+				.modal-title 
+					span File Name: &nbsp;&nbsp; {{fileinfo.name}} &nbsp;&nbsp;
+					//- i.pe-7s-download.pe-2x
+					div Owner: &nbsp;&nbsp; {{fileinfo.owner}} &nbsp;&nbsp;
+					div Upload Time: &nbsp;&nbsp; {{fileinfo.uploadtime}}
+
+			.modal-body
+				//- div(ng-repeat='match in matches')
+				//- 	{{match}}
+				accordion(close-others="oneAtTime" ng-if='matches.length!=0')
+					accordion-group(ng-repeat='match in matches')
+						accordion-heading
+							i.glyphicon.glyphicon-pencil &nbsp; {{match.title}}
+						pre.content{{match.body}}
+				div(ng-if='matches.length==0') Nothing to check...
+			.modal-footer()
+				button.btn.btn-warning(ng-click='$hide()') Close

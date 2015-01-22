@@ -1,0 +1,36 @@
+.modal
+	.modal-dialog
+		.modal-content
+			.modal-header
+				div.modal-title 
+					div Edit User
+
+			.modal-body
+				table.table
+					tr
+						td.pull-right FIRST NAME 
+						td 
+							input.medium(ng-model='user.firstname')
+					tr 
+						td.pull-right LAST NAME
+						td
+							input.medium(ng-model='user.lastname')
+					tr
+						td.pull-right GROUP
+						td
+							input.medium(ng-model='user.group_id') 
+					tr
+						td.pull-right COMPANY
+						td
+							input.medium(ng-model='user.customer')
+					tr
+						td.pull-right EMAIL
+						td
+							input.medium(ng-model='user.email')
+								
+				div(flash-alert='success', active-class='in alert', class='fade')
+					span.alert-message {{flash.message}}
+
+			.modal-footer()
+				button.btn.btn-warning(ng-click='$hide()') Cancel
+				button.btn.btn-primary(ng-controller='userCtrl', ng-click="updateMe(user)") OK

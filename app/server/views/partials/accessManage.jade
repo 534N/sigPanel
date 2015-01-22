@@ -1,0 +1,15 @@
+.row	
+	.table-container(ng-controller='accessManage', ng-init='loadGroups()')
+		table.user-table.table.table-striped
+			thead
+				tr.row-title 
+					th.headtitle(ng-repeat='list in lists') 
+
+			tbody
+				tr.booking-table.table.table-striped(ng-repeat='group in structuredGroups track by $index')
+					td.tbd {{group.company}}: {{group.name}}
+					td.tbd 
+					td.tbd 
+					td.tbd 
+					td
+						i.pe-7s-monitor.pe-lg.pe-va.book-ssh(data-animation="am-fade-and-scale", data-placement="center", data-template='../partials/editGroups-modal', bs-modal="modal")

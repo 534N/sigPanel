@@ -1,0 +1,31 @@
+//- 
+
+div#detailAside(class="aside right am-fade-and-slide-right",role="dialog")
+	div(class="aside-dialog")
+		div(class="aside-content")
+			div(class="aside-header")
+				button(type="button", class="close", ng-click="$hide()") ×
+				h4(class="aside-title") {{filename}}
+			div(class="aside-body") 
+				.info-panel(ng-repeat='(index, info) in infoArray', ng-init='decodeRegex(info.regex);prettify(info);')
+					h4 # {{index+1}}
+					div(ng-if='fail')
+						pre.regex
+							{{regex}}
+						div(bs-tabs)
+							pre(bs-pane, title='UGLY', ng-bind='info.context').context
+							pre(bs-pane, title='PRETTY', ng-bind='info.pcontext').context
+					div.row(ng-if='!fail')
+						.col-md-7
+							pre.regex
+								{{regex}}
+							div(bs-tabs)
+								pre(bs-pane, title='UGLY', ng-bind='info.context').context
+								pre(bs-pane, title='PRETTY', ng-bind='info.pcontext').context
+						.col-md-5
+							table.table.table-striped
+								tr(ng-repeat='field in info.matches')
+									td {{field}}
+									td {{info.matches[field]}}
+			div(class="aside-footer")
+				button(type="button", class="btn btn-default", ng-click="$hide()") CLOSE

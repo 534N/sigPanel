@@ -1,0 +1,86 @@
+.row(class='background-{{filter}}')
+
+	.table-container(ng-repeat='row in rows')
+		table.booking-table.table.table-striped
+			thead
+				tr.row-title
+					//- td &nbsp;
+					td.row-text 
+						span Row {{row}}
+			tbody
+				tr.booking-table.table.table-striped(ng-repeat='(rack, nodes) in structuredNodes[row] track by rack')
+					//- div.tab-pane.active(id='{{filter}}')
+					td.rackNumber(class='{{filter}}') {{rack}}
+					td
+						table.table-hover
+							tr(ng-repeat='node in nodes track by $index', class="{{node.status}}")
+								td.col-md-1 
+									i.pe-7s-signal.pe-lg.pe-va(class='icon-{{node.status}}')
+								td.col-md-1 {{node.ip}}
+								td.col-md-1 {{node.type}}
+								td.col-md-1(ng-if="node.version") {{node.version}}
+								td.col-md-1(ng-if="!node.version") &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								td.col-md-1(ng-if="user.authorized && (filter == 'busy' || filter == 'mine' || filter == 'config')") {{node.startDate}}
+								td.col-md-1(ng-if="user.authorized && (filter == 'busy' || filter == 'mine' || filter == 'config')") {{node.endDate}}
+								td.col-md-1(ng-if="user.authorized && filter == 'free'")
+									i.pe-7s-date.pe-lg.pe-va.book-submit(ng-controller='modalCtrl', ng-click='setNode(node)', data-animation="am-fade-and-scale", data-placement="center", data-template='../partials/book-modal', bs-modal="modal")
+								td.col-md-1(ng-if="user.authorized && filter == 'mine'", ng-controller='modalCtrl')
+									i.pe-7s-edit.pe-lg.pe-va.book-submit(ng-controller='modalCtrl', ng-click='setNode(node)',  data-animation="am-fade-and-scale", data-placement="center", data-template='../partials/book-modal', bs-modal="modal")
+								td.col-md-1(ng-if="user.authorized && (filter == 'busy' || filter == 'config')", ng-controller='userInfoPopoverCtrl') 
+									a(ng-if='node.owner', ng-click="setUser(node)", title='{{popover.title}}', data-content='{{popover.content}}', data-template='../partials/userInfo', data-animation="am-flip-x", bs-popover) {{node.ownerObj.first_name | capitalize}} {{node.ownerObj.last_name | capitalize}}
+								td.col-md-1(ng-controller='sshLinkCtrl')
+									i.pe-7s-monitor.pe-lg.pe-va.book-ssh(ng-if='(node.status == "live") && showSSH(node, filter) && user.authorized', data-animation="am-fade-and-scale", data-template='../partials/console', ng-click='connectNode(node)', data-placement='center', bs-modal='modal') 
+								td.col-md-1(ng-controller='sshLinkCtrl')
+									i.pe-7s-refresh.pe-lg.pe-va.book-ping(ng-if='user.authorized && (!spinning)', ng-click="pingNode(node)", data-type="success", data-title='{{tooltip.ping}}', data-animation="am-fade-and-scale", bs-tooltip="tooltip")
+									span(us-spinner='{radius:4, width:1, length: 3}', spinner-key="{{spinnerKey}}", ng-init='setSpinnerKey(node)')
+								td.col-md-1(ng-if="filter == 'config' && user.authenticated")
+									i.pe-7s-note.pe-lg.pe-va.book-config(ng-if='editable(node)', ng-controller='modalCtrl', ng-click='setNode(node)', data-animation="am-fade-and-scale", data-placement="center", data-template='../partials/node-edit-modal', bs-modal="modal")
+
+	.container(ng-if="filter == 'config' && user.authenticated")
+		div.addNodePanel(ng-controller='nodeBookingCtrl', ng-init='node.username="admin"; node.password="admin"')
+			h1 ADD NODE 
+			hr 
+			form(ng-submit="addNode(node)")
+				table.table.row
+					tr 
+						td 
+							div(flash-alert='error', active-class='in alert', class='fade')
+								span.alert-message {{flash.message}}
+							div(flash-alert='success', active-class='in alert', class='fade')
+								span.alert-message {{flash.message}}
+					tr 
+						td
+							input.medium(ng-model='node.ip', placeholder='ACTIVE IP', required)
+					tr 
+						td.col-md-6
+							select.medium.form-control(ng-model='node.type', ng-init='parseType()', ng-change='changeSize(node)', ng-options='i.type for i in items' required)
+								option(value="") --SELECT A TYPE--
+						td.col-md-1.center.text
+							a.pe-7s-plus.pe-2x.pe-va(ng-if='!showTypePanel', ng-click='showAddTypePanel()')
+							a.pe-7s-close.pe-2x.pe-va(ng-if='showTypePanel', ng-click='hideAddTypePanel()')
+						td.col-md-3
+							div.slide(ng-if='showTypePanel')
+								input(name='newType', size='150', ng-model='newObj.newType', placeholder='TYPE') 
+								input(name='newSize', size='150', ng-model='newObj.newSize', placeholder='SIZE') 
+								button.btn.btn-primary(type='button', ng-click='addNewType()') OK								
+					tr 
+						td
+							input.medium(ng-model='node.username', placeholder='USERNAME', required)
+					tr 
+						td
+							input.medium(ng-model='node.password', placeholder='PASSWORD', required)
+					tr 
+						td 
+							input.small(ng-model='node.position.row', placeholder='ROW', required) 
+							&nbsp;
+							input.small(ng-model='node.position.rack', placeholder='RACK', required) 
+							&nbsp;
+							input.small(ng-model='node.position.pos', placeholder='POSITION', required) 
+					tr 
+						td
+							input.small(ng-model='node.position.size', placeholder='SIZE', required)
+					tr
+						td
+							button.btn.btn-primary(type="submit") OK
+	
+

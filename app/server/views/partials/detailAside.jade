@@ -1,0 +1,9 @@
+div#detailAside(class="aside right am-fade-and-slide-right",role="dialog")
+	div(class="aside-dialog")
+		div(class="aside-content")
+			div(class="aside-header")
+				button(type="button", class="close", ng-click="$hide()") ×
+				h4(class="aside-title") {{thisSig.name}}
+			div(class="aside-body") {{thisSig.detail}}
+			div(class="aside-footer")
+				button(type="button", class="btn btn-default", ng-click="$hide()") CLOSE

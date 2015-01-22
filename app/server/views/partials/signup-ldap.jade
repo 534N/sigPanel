@@ -1,0 +1,32 @@
+.authenticatePanel
+
+	.signupPanel.toggle
+		.banner
+			h1 
+				a.backHome(href='#/loadNodes/free') 
+					i.pe-7s-home.pe-4x.pe-va
+		form
+			table.table 
+				
+				tr 
+					td
+						input(name='email', placeholder='Email', ng-model='email', required)
+				tr
+					td
+						input(name='login', placeholder='CSL', ng-model='csl', required)
+				tr
+					td &nbsp;
+				tr
+					td
+						button.btn(ng-click='verify()') SIGN UP 
+				tr 
+					td 
+						span &nbsp; or &nbsp; 
+				tr
+					td
+						a(href='#ldap') LOG IN
+							//- i.pe-7s-add-user.pe-3x.pe-va
+				div(flash-alert='success', active-class='in alert', class='fade')
+					span.alert-message {{flash.message}}				
+			
+.patchingPanel &nbsp;

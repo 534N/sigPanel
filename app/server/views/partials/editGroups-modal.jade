@@ -1,0 +1,29 @@
+.modal
+	.modal-dialog
+		.modal-content
+			.modal-header
+				div.modal-title 
+					div Group Access Manage: {{group.group}}
+
+			.modal-body
+				table.table
+					tr 
+						td.pull-right CLI
+						td
+							input.medium(ng-model='group.access_CLI')
+					tr
+						td.pull-right SANITY CHECK
+						td
+							input.medium(ng-model='group.access_SC') 
+					tr
+						td.pull-right HARDWARE INFO
+						td
+							input.medium(ng-model='group.access_HI')
+
+								
+				div(flash-alert='success', active-class='in alert', class='fade')
+					span.alert-message {{flash.message}}
+
+			.modal-footer()
+				button.btn.btn-warning(ng-click='$hide()') Cancel
+				button.btn.btn-primary(ng-controller='accessManage', ng-click="updateAccess()") OK

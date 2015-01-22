@@ -1,0 +1,75 @@
+.modal
+	.modal-dialog
+		.modal-content
+			.modal-header
+				div.modal-title 
+					div(class='label label-info') {{sig.name}} 
+					span &nbsp; &middot; &nbsp; LEVEL {{sig.level}} &nbsp; &middot; &nbsp;
+					//- span(ng-if='node.version') {{node.version}}
+					button.close(ng-click='$hide()') x 
+
+			.modal-body
+				table.table
+					tr 
+								td.text.pull-right PLATFORM
+								td.col-md-6
+									span(ng-repeat='(p, value) in sig.platform[0]')
+										{{p}} 
+										input.signature-name(type='checkbox', ng-model='sig.platform[p]') 
+							tr 
+								td.text.pull-right CATEGORY
+								td.col-md-6
+									input.signature-name(name='category', size='350px', ng-model='sig.category', placeholder='Category') 
+							tr 
+								td.text.pull-right COMPONENT 
+								td.col-md-6 
+									input.signature-name(name='component', size='350px', ng-model='sig.component', placeholder='New Component') 
+							tr 
+								td.text.pull-right SIGNATURE
+								td.col-md-6
+									input.signature-name(name='signature', size='350px', ng-model='sig.name', placeholder='New Signature') 
+							tr 
+								td.text.pull-right DETAIL
+								td.col-md-6
+									textarea(name='detail', size='350', ng-model='sig.detail', placeholder='Details')
+							tr 
+								td.text.pull-right 2LS MESSAGE
+								td.col-md-6
+									textarea(name='tlsmessage', size='350', ng-model='sig.tlsmessage', placeholder='2LS message')
+							tr 
+								td.text.pull-right CUSTOMER MESSAGE
+								td.col-md-6
+									textarea(name='customermessage', size='350', ng-model='sig.customermessage', placeholder='customer message')
+							tr 
+								td.text.pull-right ACTION
+								td.col-md-6
+									textarea(name='detail', size='350', ng-model='sig.action', placeholder='Action') 
+							tr 
+								td.text.pull-right LEVEL
+								td.col-md-6
+									input.signature-level(type='number', name='level', size='150', ng-model='sig.level', placeholder='Level') 
+									&nbsp;
+									input.signature-threshold(type='number', name='threshold', size='150', ng-model='sig.threshold', placeholder='Threshold') 
+							tr 
+								td.text.pull-right DTS
+								td.col-md-6
+									input.signature-dts(name='dts', size='350', ng-model='sig.dts', placeholder='DTS') 
+							tr 
+								td.text.pull-right FIX
+								td.col-md-6
+									input.signature-fix(name='fix', size='100', ng-model='sig.fixed', placeholder='Fix') 
+							tr 
+								td.text.pull-right RN
+								td.col-md-6
+									input.signature-rn(name='RN', size='100', ng-model='sig.rn', placeholder='RN') 
+							tr 
+								td.text.pull-right TA
+								td.col-md-6
+									input.signature-ta(name='TA', size='100', ng-model='sig.ta', placeholder='TA')
+
+				div(flash-alert='success', active-class='in alert', class='fade')
+					span.alert-message {{flash.message}}
+
+			.modal-footer()
+				button.btn.btn-warning(ng-click='$hide()') Cancel
+				button.btn.btn-primary(ng-controller='addSigCtrl', ng-click="updateSig(sig)") OK

@@ -1,0 +1,51 @@
+.row#soccer(ng-controller='playerListCtrl', ng-init='allPlayers(); gameDays()')
+	.add-player
+		table.table
+			tr 
+				td
+					input.name(type='text', placeholder='FIRST NAME', ng-model='checkingObj.first')
+					&nbsp;
+					input.name(placeholder='LAST NAME', ng-model='checkingObj.last')
+					&nbsp;
+					input.name(placeholder='EMAIL', ng-model='checkingObj.email')
+				td 
+					span MONDAY &nbsp;
+					input(type='checkbox', placeholder='MONDAY', ng-model='checkingObj.monday', ng-true-value='true', ng-false-value='false') 
+				td 
+					span WEDNESDAY &nbsp;
+					input(type='checkbox', placeholder='WEDNESDAY', ng-model='checkingObj.wednesday', ng-true-value='true', ng-false-value='false') 
+				td
+					button.btn.btn-primary(ng-click='addPlayer()') ADD
+	.player-list
+		.container
+			table.table.table-striped
+				thead
+					tr
+						th NAME
+						th(ng-click='showMonGames()') MONDAY
+						th(ng-click='showWedGames()') WEDNESDAY
+						th BALANCE
+						th STATUS
+				tbody
+					tr(ng-repeat='player in playerList track by $index')
+						td {{player.firstName}} {{player.lastName}}
+						td {{player.monday}}
+						td {{player.wednesday}}
+						td {{player.balance}}
+						td 
+							i.pe-7s-cart.pe-lg.pe-va.pay-balance(ng-if='!player.paid', ng-click='payBalance(player)')
+							span(ng-if='player.paid') 
+								i.pe-7s-check.pe-lg.pe-va.paid 
+								&nbsp; {{player.paid_date}} &nbsp;
+					tr.total
+						td {{totalPlayers}}
+						td {{totalMonday}}
+						td {{totalWednesday}}
+						td {{balanceTotal}}
+						td {{paidTotal}}
+	.center 
+		button.btn.btn-primary(ng-click='generateReminder()') REMINDER
+	br
+
+
+

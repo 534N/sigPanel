@@ -1,0 +1,11 @@
+.row	
+	.table-container(ng-controller='loadUsers' ng-init='loadUserList(filter)')
+		table.user-table.table.table-striped(ng-table="tableParams" show-filter="true")
+			tr.booking-table.table.table-striped(ng-repeat='user in $data')
+				td(data-title="'id'" filter="{ 'id': 'text' }" sortable="'id'") {{user.id}}
+				td(data-title="'firstname'" filter="{ 'firstname': 'text' }" sortable="'firstname'") {{user.firstname}} {{user.lastname}} 
+				td(data-title="'group_id'" filter="{ 'group_id': 'text' }" sortable="'group_id'") {{user.group_id}}
+				td(data-title="'customer'" filter="{ 'customer': 'text' }" sortable="'customer'") {{user.customer}}
+				td(data-title="'email'" filter="{ 'email': 'text' }" sortable="'email'") {{user.email}}
+				td
+					i.pe-7s-monitor.pe-lg.pe-va.book-ssh(data-animation="am-fade-and-scale", data-placement="center", data-template='../partials/editUsers-modal', bs-modal="modal")
